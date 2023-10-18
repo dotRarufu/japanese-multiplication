@@ -63,7 +63,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
           const overlapY = y - circleRadius - parent.getBoundingClientRect().y;
           overlapElem.style.left = `${overlapX}px`;
           overlapElem.style.top = `${overlapY}px`;
-          overlapElem.style.transform = 'translate(-25%, -25%)';
+          overlapElem.style.transform = 'translate(-15%, -15%)';
           // console.log('overlap show:', x, y);
         }
       });
@@ -95,7 +95,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
     verticals.current = [];
 
     return question.x1.map((digit, i1) => (
-      <div key={i1} className="flex gap-4">
+      <div key={i1} className="flex gap-6">
         {Array(digit)
           .fill('')
           .map((_, i2) => (
@@ -107,7 +107,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
                   element,
                 ])
               }
-              className=" w-[0.25em] bg-red-500 "
+              className=" w-[0.25em] bg-red-500 rounded-full  "
             />
           ))}
       </div>
@@ -118,7 +118,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
     horizontals.current = [];
 
     return question.x2.map((digit, i1) => (
-      <div key={i1} className="flex gap-4 flex-col ">
+      <div key={i1} className="flex gap-6 flex-col ">
         {Array(digit)
           .fill('')
           .map((_, i2) => (
@@ -130,7 +130,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
                   element,
                 ])
               }
-              className=" h-[0.25em] bg-blue-500  "
+              className=" h-[0.25em] bg-blue-500 rounded-full "
             />
           ))}
       </div>
@@ -156,18 +156,23 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
   };
 
   return (
-    <div ref={parentElem} className="aspect-square w-full  relative p-4 ">
-      {/* Intersections */}
-      {generateIntersections()}
+    <div className=" p-4 w-full border border-neutral-content">
+      <div
+        ref={parentElem}
+        className="aspect-square w-full  relative rounded  overflow-clip"
+      >
+        {/* Intersections */}
+        {generateIntersections()}
 
-      {/* Verticals */}
-      <div className="px-2 gap-4 w-full flex justify-around absolute left-0 top-0 ">
-        {generateVerticals()}
-      </div>
+        {/* Verticals */}
+        <div className="px-2 gap-4 w-full flex justify-around absolute left-0 top-0 ">
+          {generateVerticals()}
+        </div>
 
-      {/* Horizontals */}
-      <div className="py-2 w-full h-full flex flex-col gap-8 absolute left-0 top-0 justify-around">
-        {generateHorizontals()}
+        {/* Horizontals */}
+        <div className="py-2 w-full h-full flex flex-col gap-8 absolute left-0 top-0 justify-around">
+          {generateHorizontals()}
+        </div>
       </div>
     </div>
   );
