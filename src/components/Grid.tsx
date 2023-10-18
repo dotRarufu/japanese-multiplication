@@ -31,14 +31,14 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
       overlapElems.current.filter(i => i === null).length === 0;
     const parent = parentElem.current;
 
+    // Match lines width to parent
     verticals.current.forEach(elem => {
       elem!.style.height = `${parentElem.current!.offsetHeight}px`;
-      console.log('a:', parentElem.current!.offsetHeight);
     });
     horizontals.current.forEach(elem => {
       elem!.style.width = parentElem.current!.style.width;
     });
-    console.log('re renders grid');
+
     if (
       !noNullVertical ||
       !noNullHorizontal ||
@@ -46,12 +46,12 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
       parent === null
     )
       return;
-    console.log('passes');
+
     let currentOverlapElemIndex = -1;
     verticals.current.forEach(v => {
       horizontals.current.forEach(h => {
         const isOverlap = isOverlapping(v!, h!, parentElem.current!);
-        // console.log(`v: ${i1} | h: ${i2}`);
+
         if (isOverlap) {
           const [x, y] = isOverlap;
           currentOverlapElemIndex += 1;
@@ -82,14 +82,6 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
   useEffect(() => {
     setQuestion({ x1, x2 });
   }, [x1, x2]);
-
-  useEffect(() => {
-    const parent = parentElem.current;
-
-    if (parent === null) return;
-
-    parent.style.width = deviceEmWidth;
-  }, [deviceEmWidth]);
 
   const generateVerticals = () => {
     verticals.current = [];
