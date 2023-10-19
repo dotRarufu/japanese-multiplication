@@ -7,10 +7,9 @@ export type GridProps = {
   x1: number[];
   x2: number[];
   deviceEmWidth: string;
-  em: number;
 };
 
-function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
+function Grid({ x1, x2, deviceEmWidth }: GridProps) {
   const verticals = useRef<(HTMLDivElement | null)[]>([]);
 
   const horizontals = useRef<(HTMLDivElement | null)[]>([]);
@@ -99,7 +98,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
                   element,
                 ])
               }
-              className=" w-[0.25em] bg-red-500 rounded-full  "
+              className=" w-[0.25em] bg-primary rounded-full  "
             />
           ))}
       </div>
@@ -122,7 +121,7 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
                   element,
                 ])
               }
-              className=" h-[0.25em] bg-blue-500 rounded-full "
+              className=" h-[0.25em] bg-secondary rounded-full "
             />
           ))}
       </div>
@@ -148,10 +147,10 @@ function Grid({ x1, x2, deviceEmWidth, em }: GridProps) {
   };
 
   return (
-    <div className=" p-4 w-full border border-neutral-content">
+    <div className=" p-4 w-full border rounded-lg border-neutral-content">
       <div
         ref={parentElem}
-        className="aspect-square w-full  relative rounded  overflow-clip"
+        className="aspect-square w-full  relative   overflow-clip"
       >
         {/* Intersections */}
         {generateIntersections()}
