@@ -6,12 +6,11 @@ import Intersection from './Intersection';
 export type GridProps = {
   x1: number[];
   x2: number[];
-  deviceEmWidth: string;
 };
 
-function Grid({ x1, x2, deviceEmWidth }: GridProps) {
+function Grid({ x1, x2 }: GridProps) {
+  const [, setTime] = useState(new Date());
   const verticals = useRef<(HTMLDivElement | null)[]>([]);
-
   const horizontals = useRef<(HTMLDivElement | null)[]>([]);
   const overlapElems = useRef<(HTMLDivElement | null)[]>([]);
   const parentElem = useRef<HTMLDivElement | null>(null);
@@ -31,12 +30,12 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
     const parent = parentElem.current;
 
     // Match lines width to parent
-    verticals.current.forEach(elem => {
-      elem!.style.height = `${parentElem.current!.offsetHeight}px`;
-    });
-    horizontals.current.forEach(elem => {
-      elem!.style.width = parentElem.current!.style.width;
-    });
+    // verticals.current.forEach(elem => {
+    //   elem!.style.height = `${parentElem.current!.offsetHeight}px`;
+    // });
+    // horizontals.current.forEach(elem => {
+    //   elem!.style.width = parentElem.current!.style.width;
+    // });
 
     if (
       !noNullVertical ||
@@ -70,12 +69,13 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
   };
 
   useEffect(() => {
-    check();
-  }, []);
+    const interval = setInterval(() => {
+      check();
+      setTime(new Date());
+    }, 1000);
 
-  useEffect(() => {
-    check();
-  }, [deviceEmWidth, question.x1, question.x2]);
+    return () => clearInterval(interval);
+  }, []);
 
   // Sync questions
   useEffect(() => {
@@ -86,7 +86,7 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
     verticals.current = [];
 
     return question.x1.map((digit, i1) => (
-      <div key={i1} className="flex gap-6">
+      <div key={i1} className="flex gap-4 w-full justify-center ">
         {Array(digit)
           .fill('')
           .map((_, i2) => (
@@ -98,7 +98,7 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
                   element,
                 ])
               }
-              className=" w-[0.25em] bg-primary rounded-full  "
+              className=" w-[0.25em] bg-success rounded-full h-full shadow-md  "
             />
           ))}
       </div>
@@ -109,7 +109,7 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
     horizontals.current = [];
 
     return question.x2.map((digit, i1) => (
-      <div key={i1} className="flex gap-6 flex-col ">
+      <div key={i1} className="flex gap-6 flex-col w-full  ">
         {Array(digit)
           .fill('')
           .map((_, i2) => (
@@ -121,7 +121,7 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
                   element,
                 ])
               }
-              className=" h-[0.25em] bg-secondary rounded-full "
+              className=" h-[0.25em] bg-error rounded-full w-full shadow-md "
             />
           ))}
       </div>
@@ -147,16 +147,16 @@ function Grid({ x1, x2, deviceEmWidth }: GridProps) {
   };
 
   return (
-    <div className=" p-4 w-full border rounded-lg border-neutral-content">
+    <div className="p-4 w-full rounded-lg  bg-neutral/25">
       <div
         ref={parentElem}
-        className="aspect-square w-full  relative   overflow-clip"
+        className="mx-auto aspect-square h-full max-w-[50vh] sm:max-w-[70vw]  relative"
       >
         {/* Intersections */}
         {generateIntersections()}
 
         {/* Verticals */}
-        <div className="px-2 gap-4 w-full flex justify-around absolute left-0 top-0 ">
+        <div className=" overflow-hidden  px-2 gap-4 w-full h-full flex justify-around absolute left-0 top-0 ">
           {generateVerticals()}
         </div>
 
