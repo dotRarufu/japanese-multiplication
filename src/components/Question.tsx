@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import Grid from './components/Grid';
-import { sampleQuestions } from './data/sampleQuestions';
+import Grid from './Grid';
+import { sampleQuestions } from '../data/sampleQuestions';
+import TopAppBar from './TopAppBar';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export type Question = { text: string; x1: number[]; x2: number[] };
+export type QuestionData = { text: string; x1: number[]; x2: number[] };
 
-function App() {
-  const [question, setQuestion] = useState<Question>(sampleQuestions[0]);
+const Question = () => {
+  const { number } = useParams();
+  const navigate = useNavigate();
+  const [question, setQuestion] = useState<QuestionData>(
+    sampleQuestions[Number(number) - 1]
+  );
   const [preAnswer, setPreAnswer] = useState<number[]>([]);
   const [finalAnswer, setFinalAnswer] = useState(0);
 
@@ -16,6 +22,9 @@ function App() {
   };
 
   const nextQuestion = () => {
+    const nextLevel = Number(number) + 1;
+    navigate('/questions/' + nextLevel);
+
     const current = sampleQuestions.findIndex(q => q.text === question.text);
     const next = sampleQuestions[current + 1];
     setFinalAnswer(0);
@@ -34,22 +43,17 @@ function App() {
 
   return (
     <>
-      <div className=" relative ">
+      <div className="h-screen flex flex-col">
+        <TopAppBar question={question.text} />
+
         <div className="flex flex-col gap-8 text-[24px] items-center px-[16px] py-4">
           <div className=" text text-center flex flex-col gap-4 w-full">
-            <div className="rounded-lg flex flex-col gap-2 bg-neutral/50 py-2">
-              <span className="text-base">
-                Level {sampleQuestions.findIndex(q => q.text === question.text)}
-              </span>
-              <span className="text-[20px] font-bold">{question.text}</span>
-            </div>
-
             <div className="">
               <Grid x1={question.x1} x2={question.x2} />
             </div>
           </div>
 
-          <div className="flex flex-col h-full gap-4 w-full">
+          <div className="flex flex-col h-full  gap-4 w-full">
             <div className="w-full flex justify-evenly gap-2 ">
               {Array(getAnwerInputNumber())
                 .fill('')
@@ -83,9 +87,11 @@ function App() {
             </button>
           </div>
         </div>
+
+        {/* <div className="bg-neutral w-full h-full">tasdest</div> */}
       </div>
     </>
   );
-}
+};
 
-export default App;
+export default Question;

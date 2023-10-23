@@ -1,8 +1,8 @@
-import { Question } from '../App';
+import { QuestionData } from '../components/Question';
 
-export const sampleQuestions: Question[] = [
+export const sampleQuestions: QuestionData[] = [
   {
-    text: 'How many days are there in 6 weeks excluding weekends?',
+    text: '1 x 5?',
     x1: [1],
     x2: [5],
   },

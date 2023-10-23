@@ -147,7 +147,7 @@ function Grid({ x1, x2 }: GridProps) {
   };
 
   return (
-    <div className="p-4 w-full rounded-lg  bg-neutral/25">
+    <div className="p-4 w-full rounded-lg  ">
       <div
         ref={parentElem}
         className="mx-auto aspect-square h-full max-w-[50vh] sm:max-w-[70vw]  relative"
