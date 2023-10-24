@@ -13,7 +13,7 @@ export const getLatestLevel = () => {
   if (level === null) {
     console.error('Latest level is null');
 
-    return 0;
+    return 1;
   }
 
   return Number(level);
