@@ -20,7 +20,8 @@ const router = createBrowserRouter([
     element: <Levels />,
   },
   {
-    path: '/questions/:number',
+    // todo: add guard if category and level is unlocked
+    path: '/questions/:category/:number',
     element: <Question />,
   },
 ]);

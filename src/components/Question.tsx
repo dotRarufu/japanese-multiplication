@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Grid from './Grid';
-import { easyQuestions } from '../data/questions';
 import TopAppBar from './TopAppBar';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateLatestLevel } from '../services/level';
+import { LevelCategory, updateLatestLevel } from '../services/level';
+import { getActiveCategory } from '../utils/getActiveCategory';
+import { getNextCategory } from '../utils/getNextCategory';
 
 export type QuestionData = { text: string; x1: number[]; x2: number[] };
 
 const Question = () => {
-  const { number } = useParams();
+  const { number, category } = useParams();
   const navigate = useNavigate();
+  const activeQuestionSet = getActiveCategory(category as LevelCategory);
   const [question, setQuestion] = useState<QuestionData>(
-    easyQuestions[Number(number) - 1]
+    activeQuestionSet[Number(number) - 1]
   );
   const [preAnswer, setPreAnswer] = useState<number[]>([]);
   const [finalAnswer, setFinalAnswer] = useState('');
@@ -22,18 +24,31 @@ const Question = () => {
       : question.x2.length;
   };
 
+  // For setting correct question when changing category
+  useEffect(() => {
+    const next = activeQuestionSet[Number(number) - 1];
+    setQuestion(next);
+  }, [activeQuestionSet, number]);
+
   const nextQuestion = () => {
     const nextLevel = Number(number) + 1;
 
-    const current = easyQuestions.findIndex(q => q.text === question.text);
-    const next = easyQuestions[current + 1];
+    const current = activeQuestionSet.findIndex(q => q.text === question.text);
+    const next = activeQuestionSet[current + 1];
     setFinalAnswer('');
     setPreAnswer([]);
     setQuestion(next);
 
-    updateLatestLevel(nextLevel);
+    if (nextLevel > activeQuestionSet.length) {
+      const nextCategory = getNextCategory(category as LevelCategory);
 
-    navigate('/questions/' + nextLevel);
+      updateLatestLevel(1, nextCategory);
+      navigate(`/questions/${nextCategory}/${1}`);
+      return;
+    }
+
+    updateLatestLevel(nextLevel, category as LevelCategory);
+    navigate(`/questions/${category}/${nextLevel}`);
   };
 
   const checkAnswer = () => {

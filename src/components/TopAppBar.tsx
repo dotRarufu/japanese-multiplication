@@ -1,6 +1,6 @@
 import { FiHelpCircle } from 'react-icons/fi';
-import logo from '../assets/logo.jpg';
 import { useNavigate, useParams } from 'react-router-dom';
+// import logo from '../assets/logo.jpg';
 
 type Props = {
   question: string;

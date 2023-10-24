@@ -1,25 +1,54 @@
-const KEYS = {
-  level: 'JapaneseMultiplication_Level',
-  name: 'JapaneseMultiplication_Name',
+export type LevelCategory = 'Easy' | 'Medium' | 'Hard';
+export const LevelCategories: LevelCategory[] = ['Easy', 'Medium', 'Hard'];
+
+type AppData = {
+  name: string;
+  levels: {
+    category: LevelCategory;
+    level: number;
+  }[];
 };
 
-export const updateLatestLevel = (level: number) => {
-  localStorage.setItem(KEYS.level, level.toString());
+const AppDataKey = 'JapaneseMultiplicationData';
+
+export const updateLatestLevel = (level: number, category: LevelCategory) => {
+  const stringData = localStorage.getItem(AppDataKey);
+  const data =
+    stringData !== null ? (JSON.parse(stringData) as AppData) : DefaultAppData;
+
+  const newLevels = data.levels.map(l =>
+    l.category === category ? { ...l, level } : l
+  );
+  const newData = { ...data, levels: newLevels };
+
+  const newStringData = JSON.stringify(newData);
+  localStorage.setItem(AppDataKey, newStringData);
 };
 
-export const getLatestLevel = () => {
-  const level = localStorage.getItem(KEYS.level);
+const DefaultAppData: AppData = {
+  levels: [
+    { category: 'Easy', level: 1 },
+    { category: 'Medium', level: 0 },
+    { category: 'Hard', level: 0 },
+  ],
+  name: '',
+};
 
-  if (level === null) {
+export const getLatestLevel = (category: LevelCategory) => {
+  const stringData = localStorage.getItem(AppDataKey);
+  const data =
+    stringData !== null ? (JSON.parse(stringData) as AppData) : DefaultAppData;
+  const matchedCategory = data.levels.find(l => l.category === category);
+
+  if (!matchedCategory) {
     console.error('Latest level is null');
 
     return 1;
   }
 
-  return Number(level);
+  return Number(matchedCategory.level);
 };
 
 export const resetLevels = () => {
-  const keys = Object.values(KEYS);
-  keys.forEach(key => localStorage.removeItem(key));
+  localStorage.removeItem(AppDataKey);
 };
