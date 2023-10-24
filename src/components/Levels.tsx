@@ -1,9 +1,15 @@
-import { FiHelpCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { getLatestLevel } from '../services/level';
 
 const Levels = () => {
   const levels = Array(30).fill('');
   const navigate = useNavigate();
+
+  const isLevelActive = (level: number) => {
+    const latestLevel = getLatestLevel();
+
+    return level <= latestLevel;
+  };
 
   return (
     <div className="h-screen w-full flex flex-col ">
@@ -14,12 +20,16 @@ const Levels = () => {
         {levels.map((_, level) => (
           <div
             key={level}
-            onClick={() => navigate(`/questions/${level + 1}`)}
-            className="border-primary-content border-2 bg-primary rounded-md shadow-lg flex justify-center text-center items-center btn btn-primary btn-square btn-lg"
+            onClick={() =>
+              isLevelActive(level + 1) && navigate(`/questions/${level + 1}`)
+            }
+            className={`border-primary-content border-2 rounded-md shadow-lg flex justify-center text-center items-center btn btn-primary btn-square btn-lg ${
+              isLevelActive(level + 1)
+                ? 'bg-primary text-primary-content'
+                : 'bg-neutral text-neutral-content/25'
+            }`}
           >
-            <span className="font-bold text-xl text-primary-content">
-              {level + 1}
-            </span>
+            <span className="font-bold text-xl ">{level + 1}</span>
           </div>
         ))}
       </div>

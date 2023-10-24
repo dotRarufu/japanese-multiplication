@@ -3,6 +3,7 @@ import Grid from './Grid';
 import { sampleQuestions } from '../data/sampleQuestions';
 import TopAppBar from './TopAppBar';
 import { useNavigate, useParams } from 'react-router-dom';
+import { updateLatestLevel } from '../services/level';
 
 export type QuestionData = { text: string; x1: number[]; x2: number[] };
 
@@ -23,13 +24,16 @@ const Question = () => {
 
   const nextQuestion = () => {
     const nextLevel = Number(number) + 1;
-    navigate('/questions/' + nextLevel);
 
     const current = sampleQuestions.findIndex(q => q.text === question.text);
     const next = sampleQuestions[current + 1];
     setFinalAnswer(0);
     setPreAnswer([]);
     setQuestion(next);
+
+    updateLatestLevel(nextLevel);
+
+    navigate('/questions/' + nextLevel);
   };
 
   const checkAnswer = () => {
