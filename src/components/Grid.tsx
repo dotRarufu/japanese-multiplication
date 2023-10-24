@@ -103,19 +103,25 @@ function Grid({ x1, x2 }: GridProps) {
 
     return question.x1.map((digit, i1) => (
       <div key={i1} className="flex gap-8 w-full justify-center ">
-        {Array(Math.abs(digit))
+        {Array(Math.abs(digit === 0 ? 1 : digit))
           .fill('')
           .map((_, i2) => (
             <div
               key={i2}
+              className="relative"
               ref={element =>
                 (verticals.current = [
                   ...[...verticals.current].filter(v => v !== null),
                   element,
                 ])
               }
-              className=" w-[0.25em] bg-success rounded-full h-full shadow-md  "
-            />
+            >
+              <div
+                className={`left-[-1px] absolute w-[0.25em] border-success border-y-0 border-l-4 rounded-full h-full ${
+                  digit === 0 ? 'border-dashed' : 'border-solid'
+                } shadow-md`}
+              />
+            </div>
           ))}
       </div>
     ));
@@ -126,19 +132,25 @@ function Grid({ x1, x2 }: GridProps) {
 
     return question.x2.map((digit, i1) => (
       <div key={i1} className="flex gap-6 flex-col w-full">
-        {Array(Math.abs(digit))
+        {Array(Math.abs(digit === 0 ? 1 : digit))
           .fill('')
           .map((_, i2) => (
             <div
               key={i2}
+              className="relative"
               ref={element =>
                 (horizontals.current = [
                   ...[...horizontals.current].filter(v => v !== null),
                   element,
                 ])
               }
-              className=" h-[0.25em] bg-error rounded-full w-full shadow-md "
-            />
+            >
+              <div
+                className={`top-[2px] h-[0.25em] border-4 border-error border-x-0 border-b-0 rounded-full w-full ${
+                  digit === 0 ? 'border-dashed' : 'border-solid'
+                } shadow-md`}
+              />
+            </div>
           ))}
       </div>
     ));
@@ -151,7 +163,13 @@ function Grid({ x1, x2 }: GridProps) {
     const answer = x1 * x2;
     const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
 
-    const total = Math.abs(answer);
+    const x1HasZero = question.x1.filter(a => a === 0).length > 0;
+    const x2HasZero = question.x2.filter(a => a === 0).length > 0;
+    const x1Length = question.x1.length;
+    const x2Length = question.x2.length;
+
+    const total =
+      x1HasZero || x2HasZero ? x1Length * x2Length : Math.abs(answer);
 
     return Array(total)
       .fill('')

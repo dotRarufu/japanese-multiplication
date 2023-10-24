@@ -2,9 +2,19 @@ import { QuestionData } from '../components/Question';
 
 export const easyQuestions: QuestionData[] = [
   {
-    text: '5 x 6',
-    x1: [5],
-    x2: [6],
+    text: '10 x 10',
+    x1: [1, 0],
+    x2: [1, 0],
+  },
+  {
+    text: '1 x 10',
+    x1: [1, 0],
+    x2: [1],
+  },
+  {
+    text: '1 x 10',
+    x1: [1],
+    x2: [1, 0],
   },
   // {
   //   text: '-9 x 26',
