@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import isOverlapping from '../utils/isOverlapping';
-import multiplyArrays from '../utils/multiplyArrays';
 import Intersection from './Intersection';
 
 export type GridProps = {
@@ -46,9 +45,21 @@ function Grid({ x1, x2 }: GridProps) {
       return;
 
     let currentOverlapElemIndex = -1;
-    verticals.current.forEach(v => {
-      horizontals.current.forEach(h => {
-        const isOverlap = isOverlapping(v!, h!, parentElem.current!);
+
+    const x1 = Number(question.x1.join(''));
+    const x2 = Number(question.x2.join(''));
+    const answer = x1 * x2;
+    const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
+    const notSameDigitCount = question.x1.length !== question.x2.length;
+    const shouldShade =
+      verticals.current.length > 1 && isShaded === null && notSameDigitCount;
+    let alreadyShadedOne = false;
+
+    horizontals.current.forEach((h, hIndex) => {
+      if (hIndex > 1) alreadyShadedOne = true;
+
+      verticals.current.forEach(v => {
+        const isOverlap = isOverlapping(h!, v!, parentElem.current!);
 
         if (isOverlap) {
           const [x, y] = isOverlap;
@@ -63,6 +74,11 @@ function Grid({ x1, x2 }: GridProps) {
           overlapElem.style.top = `${overlapY}px`;
           overlapElem.style.transform = 'translate(-15%, -15%)';
           // console.log('overlap show:', x, y);
+
+          // Shade
+          if (shouldShade && !alreadyShadedOne) {
+            overlapElem.style.backgroundColor = '#fcd662';
+          }
         }
       });
     });
@@ -86,8 +102,8 @@ function Grid({ x1, x2 }: GridProps) {
     verticals.current = [];
 
     return question.x1.map((digit, i1) => (
-      <div key={i1} className="flex gap-4 w-full justify-center ">
-        {Array(digit)
+      <div key={i1} className="flex gap-8 w-full justify-center ">
+        {Array(Math.abs(digit))
           .fill('')
           .map((_, i2) => (
             <div
@@ -109,8 +125,8 @@ function Grid({ x1, x2 }: GridProps) {
     horizontals.current = [];
 
     return question.x2.map((digit, i1) => (
-      <div key={i1} className="flex gap-6 flex-col w-full  ">
-        {Array(digit)
+      <div key={i1} className="flex gap-6 flex-col w-full">
+        {Array(Math.abs(digit))
           .fill('')
           .map((_, i2) => (
             <div
@@ -130,12 +146,19 @@ function Grid({ x1, x2 }: GridProps) {
 
   const generateIntersections = () => {
     overlapElems.current = [];
+    const x1 = Number(question.x1.join(''));
+    const x2 = Number(question.x2.join(''));
+    const answer = x1 * x2;
+    const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
 
-    return Array(multiplyArrays(question.x1, question.x2))
+    const total = Math.abs(answer);
+
+    return Array(total)
       .fill('')
       .map((_, i) => (
         <Intersection
           key={i}
+          isShaded={!!isShaded}
           ref={element =>
             (overlapElems.current = [
               ...[...overlapElems.current].filter(v => v !== null),
@@ -156,12 +179,12 @@ function Grid({ x1, x2 }: GridProps) {
         {generateIntersections()}
 
         {/* Verticals */}
-        <div className=" overflow-hidden  px-2 gap-4 w-full h-full flex justify-around absolute left-0 top-0 ">
+        <div className=" overflow-hidden  px-2 w-full h-full flex justify-around absolute left-0 top-0 ">
           {generateVerticals()}
         </div>
 
         {/* Horizontals */}
-        <div className="py-2 w-full h-full flex flex-col gap-8 absolute left-0 top-0 justify-around">
+        <div className="py-2 w-full h-full flex  flex-col absolute left-0 top-0 justify-around">
           {generateHorizontals()}
         </div>
       </div>

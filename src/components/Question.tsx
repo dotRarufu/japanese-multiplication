@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Grid from './Grid';
-import { sampleQuestions } from '../data/sampleQuestions';
+import { easyQuestions } from '../data/questions';
 import TopAppBar from './TopAppBar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateLatestLevel } from '../services/level';
@@ -11,10 +11,10 @@ const Question = () => {
   const { number } = useParams();
   const navigate = useNavigate();
   const [question, setQuestion] = useState<QuestionData>(
-    sampleQuestions[Number(number) - 1]
+    easyQuestions[Number(number) - 1]
   );
   const [preAnswer, setPreAnswer] = useState<number[]>([]);
-  const [finalAnswer, setFinalAnswer] = useState(0);
+  const [finalAnswer, setFinalAnswer] = useState('');
 
   const getAnwerInputNumber = () => {
     return question.x1.length > question.x2.length
@@ -25,9 +25,9 @@ const Question = () => {
   const nextQuestion = () => {
     const nextLevel = Number(number) + 1;
 
-    const current = sampleQuestions.findIndex(q => q.text === question.text);
-    const next = sampleQuestions[current + 1];
-    setFinalAnswer(0);
+    const current = easyQuestions.findIndex(q => q.text === question.text);
+    const next = easyQuestions[current + 1];
+    setFinalAnswer('');
     setPreAnswer([]);
     setQuestion(next);
 
@@ -41,7 +41,7 @@ const Question = () => {
     const x2 = parseInt(question.x2.join(''), 10);
     const correctAnswer = x1 * x2;
 
-    if (finalAnswer === correctAnswer) nextQuestion();
+    if (Number(finalAnswer) === correctAnswer) nextQuestion();
     else alert('wrong answer | correct:' + correctAnswer);
   };
 
@@ -78,9 +78,9 @@ const Question = () => {
             </div>
             <input
               value={finalAnswer}
-              onChange={e => setFinalAnswer(Number(e.target.value))}
+              onChange={e => setFinalAnswer(e.target.value)}
               type="text"
-              placeholder="0"
+              placeholder="Answer here"
               className="w-full text-center input input-primary bg-primary text-primary-content shadow-md font-bold"
             />
             <button

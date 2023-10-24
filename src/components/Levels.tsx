@@ -35,9 +35,11 @@ const Levels = () => {
         {levels.map((_, level) => (
           <div
             key={level}
-            onClick={() =>
-              isLevelActive(level + 1) && navigate(`/questions/${level + 1}`)
-            }
+            onClick={() => {
+              isLevelActive(level + 1) && navigate(`/questions/${level + 1}`);
+
+              console.log('path:', `/questions/${level + 1}`);
+            }}
             className={`border-primary-content border-2 rounded-md shadow-lg flex justify-center text-center items-center btn btn-primary btn-square btn-lg ${
               isLevelActive(level + 1)
                 ? 'bg-primary text-primary-content'
