@@ -16,10 +16,12 @@ const Question = () => {
   const [question, setQuestion] = useState<QuestionData>(
     activeQuestionSet[Number(number) - 1]
   );
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [preAnswer, setPreAnswer] = useState<string[]>([]);
   const [finalAnswer, setFinalAnswer] = useState('');
   const [time, setTime] = useState(0);
   const timerResModal = useRef<HTMLDialogElement>(null);
+  const answerResModal = useRef<HTMLDialogElement>(null);
 
   const getAnwerInputNumber = () => {
     return question.x1.length > question.x2.length
@@ -82,8 +84,11 @@ const Question = () => {
     const x2 = parseInt(question.x2.join(''), 10);
     const correctAnswer = x1 * x2;
 
-    if (Number(finalAnswer) === correctAnswer) nextQuestion();
-    else alert('wrong answer | correct:' + correctAnswer);
+    if (Number(finalAnswer) === correctAnswer) setIsCorrect(true);
+    else {
+      setIsCorrect(false);
+      // alert('wrong answer | correct:' + correctAnswer);
+    }
   };
 
   return (
@@ -125,7 +130,10 @@ const Question = () => {
               className="w-full text-center input input-primary bg-primary text-primary-content placeholder:text-primary-content shadow-md font-bold"
             />
             <button
-              onClick={() => checkAnswer()}
+              onClick={() => {
+                checkAnswer();
+                answerResModal.current!.showModal();
+              }}
               className="btn btn-accent w-full"
             >
               Final Answer
@@ -147,10 +155,57 @@ const Question = () => {
               timerResModal.current!.close();
               navigate('levels');
             }}
-            className="w-full btn btn-ghost"
+            className="w-full btn btn-accent"
           >
             Go Back
           </button>
+        </div>
+
+        <form
+          method="dialog"
+          onClick={() => {
+            timerResModal.current!.close();
+            navigate('levels');
+          }}
+          className="modal-backdrop"
+        >
+          <button>close</button>
+        </form>
+      </dialog>
+
+      {/* ====================== Result Modal ====================== */}
+      <dialog ref={answerResModal} id="answer_res_modal" className="modal ">
+        <div className="modal-box text-primary-content bg-primary rounded-md">
+          <h3 className="font-bold text-lg">
+            {isCorrect ? 'Correct' : 'Wrong'}
+          </h3>
+          <p className="py-4">
+            {' '}
+            {isCorrect
+              ? "You've answered the question correct"
+              : 'Sorry, wrong answer'}
+          </p>
+
+          {isCorrect ? (
+            <button
+              onClick={() => {
+                answerResModal.current!.close();
+                nextQuestion();
+              }}
+              className="w-full btn btn-accent"
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                answerResModal.current!.close();
+              }}
+              className="w-full btn btn-ghost"
+            >
+              OK
+            </button>
+          )}
         </div>
 
         <form
