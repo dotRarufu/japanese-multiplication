@@ -22,7 +22,7 @@ const Question = () => {
   const [time, setTime] = useState(0);
   const timerResModal = useRef<HTMLDialogElement>(null);
   const answerResModal = useRef<HTMLDialogElement>(null);
-
+  const [shouldResetMarks, setShouldResetMarks] = useState(0);
   const getAnwerInputNumber = () => {
     return question.x1.length > question.x2.length
       ? question.x1.length
@@ -65,6 +65,7 @@ const Question = () => {
     setPreAnswer([]);
     setQuestion(next);
     setTime(0);
+    setShouldResetMarks(o => o + 1);
 
     if (nextLevel > activeQuestionSet.length) {
       const nextCategory = getNextCategory(category as LevelCategory);
@@ -99,7 +100,11 @@ const Question = () => {
         <div className="flex flex-col gap-8 text-[24px] items-center px-[16px] py-4">
           <div className=" text text-center flex flex-col gap-4 w-full">
             <div className="">
-              <Grid x1={question.x1} x2={question.x2} />
+              <Grid
+                shouldResetMarks={shouldResetMarks}
+                x1={question.x1}
+                x2={question.x2}
+              />
             </div>
           </div>
 

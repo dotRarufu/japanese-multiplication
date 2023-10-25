@@ -5,9 +5,10 @@ import Intersection from './Intersection';
 export type GridProps = {
   x1: number[];
   x2: number[];
+  shouldResetMarks: number;
 };
 
-function Grid({ x1, x2 }: GridProps) {
+function Grid({ x1, x2, shouldResetMarks }: GridProps) {
   const [, setTime] = useState(new Date());
   const verticals = useRef<(HTMLDivElement | null)[]>([]);
   const horizontals = useRef<(HTMLDivElement | null)[]>([]);
@@ -176,6 +177,7 @@ function Grid({ x1, x2 }: GridProps) {
       .map((_, i) => (
         <Intersection
           key={i}
+          shouldResetMarks={shouldResetMarks}
           isShaded={!!isShaded}
           ref={element =>
             (overlapElems.current = [
@@ -211,15 +213,3 @@ function Grid({ x1, x2 }: GridProps) {
 }
 
 export default Grid;
-// const randomPoints = {
-//   x: Math.round(Math.random() * 100),
-//   y: Math.round(Math.random() * 100),
-// };
-// overlapElem.current!.style.left = `${a.x}px`;
-// overlapElem.current!.style.top = `${a.y}px`;
-
-// <div
-//   key={i}
-//   ref={element => overlapElems.current.push(element)}
-//   className="hover:bg-green-500 border-neutral-content border-[2px] bg-neutral rounded-full w-[16px] aspect-square absolute z-[99999] hidden"
-// />
