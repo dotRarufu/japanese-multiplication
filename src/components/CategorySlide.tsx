@@ -21,9 +21,12 @@ const CategorySlide = ({ index, total, title }: Props) => {
       id={`slide${index}`}
       className="carousel-item relative flex items-center w-full"
     >
-      <span className="absolute w-screen bg-neutral/25 py-8 top-0 font-bold text-4xl text-center">
+      <span className="absolute w-screen bg-neutral/25 py-8  font-bold [@media(min-height:500px)]:top-0 [@media(min-height:500px)]:text-4xl uppercase text-[152px] text-center">
         {title}
       </span>
+      {/* <span className="absolute w-screen bg-neutral/25 py-8  font-bold  text-[152px] uppercase text-center">
+        {title}
+      </span> */}
       <div className="relative px-16 flex flex-wrap overflow-y-scroll  gap-8 py-4 w-fit items-center justify-center ">
         <div className="h-full px-4 flex items-center absolute left-0">
           <a

@@ -6,6 +6,8 @@ export const getNextCategory = (previous: LevelCategory) => {
       return { title: 'Medium', id: 2 };
     case 'Medium':
       return { title: 'Hard', id: 3 };
+    case 'Hard':
+      return null;
     default:
       throw new Error('Reached ending');
   }

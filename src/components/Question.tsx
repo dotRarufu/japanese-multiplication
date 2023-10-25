@@ -70,6 +70,12 @@ const Question = () => {
     if (nextLevel > activeQuestionSet.length) {
       const nextCategory = getNextCategory(category as LevelCategory);
 
+      if (nextCategory === null) {
+        navigate(`/levels`);
+
+        return;
+      }
+
       updateLatestLevel(1, nextCategory.title as LevelCategory);
       // navigate(`/questions/${nextCategory}/${1}`);
       navigate(`/levels/#slide${nextCategory.id}`);
