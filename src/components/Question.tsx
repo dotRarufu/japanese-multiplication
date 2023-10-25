@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Grid from './Grid';
 import TopAppBar from './TopAppBar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LevelCategory, updateLatestLevel } from '../services/level';
 import { getActiveCategory } from '../utils/getActiveCategory';
 import { getNextCategory } from '../utils/getNextCategory';
+import { getCategoryTimeLimit } from '../utils/getCategoryTimeLimit';
 
 export type QuestionData = { text: string; x1: number[]; x2: number[] };
 
@@ -15,14 +16,37 @@ const Question = () => {
   const [question, setQuestion] = useState<QuestionData>(
     activeQuestionSet[Number(number) - 1]
   );
-  const [preAnswer, setPreAnswer] = useState<number[]>([]);
+  const [preAnswer, setPreAnswer] = useState<string[]>([]);
   const [finalAnswer, setFinalAnswer] = useState('');
+  const [time, setTime] = useState(0);
+  const timerResModal = useRef<HTMLDialogElement>(null);
 
   const getAnwerInputNumber = () => {
     return question.x1.length > question.x2.length
       ? question.x1.length
       : question.x2.length;
   };
+
+  // Timer
+  useEffect(() => {
+    const max = getCategoryTimeLimit(category as LevelCategory);
+    console.log('max:', max);
+    if (time === max) {
+      timerResModal.current!.showModal();
+    }
+
+    const interval = setInterval(() => {
+      if (time < max) {
+        setTime(old => old + 1);
+        console.log(time + 1);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      // console.log('interval cleared');
+    };
+  }, [category, navigate, time]);
 
   // For setting correct question when changing category
   useEffect(() => {
@@ -38,6 +62,7 @@ const Question = () => {
     setFinalAnswer('');
     setPreAnswer([]);
     setQuestion(next);
+    setTime(0);
 
     if (nextLevel > activeQuestionSet.length) {
       const nextCategory = getNextCategory(category as LevelCategory);
@@ -80,15 +105,15 @@ const Question = () => {
                 .map((_, index) => (
                   <input
                     key={index}
-                    value={preAnswer[index]}
+                    placeholder="0"
+                    value={preAnswer.length === 0 ? '' : preAnswer[index]}
                     onChange={e => {
                       const newVal = [...preAnswer];
-                      newVal[index] = Number(e.target.value);
+                      newVal[index] = e.target.value;
                       setPreAnswer(newVal);
                     }}
                     type="text"
-                    placeholder="0"
-                    className="w-full text-center input input-primary bg-primary text-primary-content shadow-md font-bold"
+                    className="w-full text-center input input-primary bg-primary text-primary-content placeholder:text-primary-content shadow-md font-bold"
                   />
                 ))}
             </div>
@@ -97,7 +122,7 @@ const Question = () => {
               onChange={e => setFinalAnswer(e.target.value)}
               type="text"
               placeholder="Answer here"
-              className="w-full text-center input input-primary bg-primary text-primary-content shadow-md font-bold"
+              className="w-full text-center input input-primary bg-primary text-primary-content placeholder:text-primary-content shadow-md font-bold"
             />
             <button
               onClick={() => checkAnswer()}
@@ -110,6 +135,35 @@ const Question = () => {
 
         {/* <div className="bg-neutral w-full h-full">tasdest</div> */}
       </div>
+
+      {/* ====================== Reset Modal ====================== */}
+      <dialog ref={timerResModal} id="reset_modal" className="modal ">
+        <div className="modal-box text-primary-content bg-primary rounded-md">
+          <h3 className="font-bold text-lg">Game Over</h3>
+          <p className="py-4">You've ran out of time</p>
+
+          <button
+            onClick={() => {
+              timerResModal.current!.close();
+              navigate('levels');
+            }}
+            className="w-full btn btn-ghost"
+          >
+            Go Back
+          </button>
+        </div>
+
+        <form
+          method="dialog"
+          onClick={() => {
+            timerResModal.current!.close();
+            navigate('levels');
+          }}
+          className="modal-backdrop"
+        >
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   );
 };
