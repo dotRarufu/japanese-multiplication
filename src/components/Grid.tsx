@@ -118,7 +118,7 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
               }
             >
               <div
-                className={`left-[-1px] absolute w-[0.25em] border-success border-y-0 border-l-4 rounded-full h-full ${
+                className={`left-[-1px] absolute w-[0.25em] border-success border-y-0 border-l-4 h-full ${
                   digit === 0 ? 'border-dashed' : 'border-solid'
                 } shadow-md`}
               />
@@ -147,7 +147,7 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
               }
             >
               <div
-                className={`top-[2px] h-[0.25em] border-4 border-error border-x-0 border-b-0 rounded-full w-full ${
+                className={`top-[2px] h-[0.25em] border-4 border-error border-x-0 border-b-0 w-full ${
                   digit === 0 ? 'border-dashed' : 'border-solid'
                 } shadow-md`}
               />
