@@ -59,7 +59,7 @@ function Grid({ x1, x2 }: GridProps) {
       if (hIndex > 1) alreadyShadedOne = true;
 
       verticals.current.forEach(v => {
-        const isOverlap = isOverlapping(h!, v!, parentElem.current!);
+        const isOverlap = isOverlapping(h!, v!);
 
         if (isOverlap) {
           const [x, y] = isOverlap;

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { FiHelpCircle } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
-import tutorial1 from '../assets/logo.jpg';
+import tutorial1 from '/assets/bg-2.jpeg';
 
 type Props = {
   question: string;

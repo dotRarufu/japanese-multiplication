@@ -50,14 +50,10 @@ import { Coordinate, getIntersection } from './getIntersection';
 // };
 // // * This fails on angles other than 0, 90, 45
 
-const isOverlapping = (
-  element1: HTMLElement,
-  element2: HTMLElement,
-  relativeElem: HTMLElement
-) => {
+const isOverlapping = (element1: HTMLElement, element2: HTMLElement) => {
   const rect1 = element1.getBoundingClientRect();
   const rect2 = element2.getBoundingClientRect();
-  const rect3 = relativeElem.getBoundingClientRect();
+  // const rect3 = relativeElem.getBoundingClientRect();
   // console.log('parent x:', rect3.x);
   const line1: { start: Coordinate; end: Coordinate } = {
     start: {
