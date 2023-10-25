@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Question from './components/Question.tsx';
 import Levels from './components/Levels.tsx';
+import ProtectedRoute from './components/ProtectedRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,10 +20,17 @@ const router = createBrowserRouter([
     path: '/levels',
     element: <Levels />,
   },
+
   {
     // todo: add guard if category and level is unlocked
     path: '/questions/:category/:number',
-    element: <Question />,
+    element: (
+      <ProtectedRoute redirectPath={'/levels'} children={<Question />} />
+    ),
+  },
+  {
+    path: '*',
+    element: <Navigate to="/" />,
   },
 ]);
 

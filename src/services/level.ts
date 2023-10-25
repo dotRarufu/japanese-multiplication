@@ -52,3 +52,14 @@ export const getLatestLevel = (category: LevelCategory) => {
 export const resetLevels = () => {
   localStorage.removeItem(AppDataKey);
 };
+
+export const getLatestCategory = () => {
+  const stringData = localStorage.getItem(AppDataKey);
+  const data =
+    stringData !== null ? (JSON.parse(stringData) as AppData) : DefaultAppData;
+
+  if (data.levels.find(l => l.category === 'Hard'))
+    return ['Easy', 'Medium', 'Hard'];
+  if (data.levels.find(l => l.category === 'Medium')) return ['Easy', 'Medium'];
+  else return ['Easy'];
+};
