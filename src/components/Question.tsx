@@ -32,7 +32,7 @@ const Question = () => {
   // Timer
   useEffect(() => {
     const max = getCategoryTimeLimit(category as LevelCategory);
-    console.log('max:', max);
+    // console.log('max:', max);
     if (time === max) {
       timerResModal.current!.showModal();
     }
@@ -40,7 +40,7 @@ const Question = () => {
     const interval = setInterval(() => {
       if (time < max) {
         setTime(old => old + 1);
-        console.log(time + 1);
+        // console.log(time + 1);
       }
     }, 1000);
 

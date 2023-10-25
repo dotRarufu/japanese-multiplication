@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import isOverlapping from '../utils/isOverlapping';
 import Intersection from './Intersection';
+import { getMaxIntersections } from '../utils/getMaxIntersections';
 
 export type GridProps = {
   x1: number[];
@@ -28,15 +29,6 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     const noNullOverlapElems =
       overlapElems.current.filter(i => i === null).length === 0;
     const parent = parentElem.current;
-
-    // Match lines width to parent
-    // verticals.current.forEach(elem => {
-    //   elem!.style.height = `${parentElem.current!.offsetHeight}px`;
-    // });
-    // horizontals.current.forEach(elem => {
-    //   elem!.style.width = parentElem.current!.style.width;
-    // });
-
     if (
       !noNullVertical ||
       !noNullHorizontal ||
@@ -44,7 +36,7 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
       parent === null
     )
       return;
-
+    console.log('checks:', overlapElems.current.length);
     let currentOverlapElemIndex = -1;
 
     const x1 = Number(question.x1.join(''));
@@ -81,6 +73,9 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
             overlapElem.style.backgroundColor = '#fcd662';
           }
         }
+
+        // const overlapElem = overlapElems.current[currentOverlapElemIndex + 1]!;
+        // overlapElem.style.display = 'none';
       });
     });
   };
@@ -159,19 +154,24 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
 
   const generateIntersections = () => {
     overlapElems.current = [];
+    // overlapElems.current.forEach(e => e && e.remove());
+    // console.log('overlaps:', overlapElems.current.length);
     const x1 = Number(question.x1.join(''));
     const x2 = Number(question.x2.join(''));
     const answer = x1 * x2;
     const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
 
-    const x1HasZero = question.x1.filter(a => a === 0).length > 0;
-    const x2HasZero = question.x2.filter(a => a === 0).length > 0;
-    const x1Length = question.x1.length;
-    const x2Length = question.x2.length;
-
-    const total =
-      x1HasZero || x2HasZero ? x1Length * x2Length : Math.abs(answer);
-
+    // const x1HasZero = question.x1.filter(a => a === 0).length > 0;
+    // const x2HasZero = question.x2.filter(a => a === 0).length > 0;
+    // const x1Length = question.x1.length;
+    // const x2Length = question.x2.length;
+    // const total =
+    //   x1HasZero || x2HasZero ? x1Length * x2Length : Math.abs(answer);
+    const total = getMaxIntersections(question.x1, question.x2);
+    // const total = x1Length * x2Length;
+    // const total = x1HasZero || x2HasZero ? x1 * x2 : Math.abs(answer);
+    console.log('total:', total);
+    // console.log('test:', Array(total).fill(''));
     return Array(total)
       .fill('')
       .map((_, i) => (
@@ -179,12 +179,14 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
           key={i}
           shouldResetMarks={shouldResetMarks}
           isShaded={!!isShaded}
-          ref={element =>
-            (overlapElems.current = [
+          ref={element => {
+            overlapElems.current = [
               ...[...overlapElems.current].filter(v => v !== null),
               element,
-            ])
-          }
+            ];
+            // console.log('intersection to bre created:', arr.length);
+            // console.log('newLength:', overlapElems.current.length);
+          }}
         />
       ));
   };
