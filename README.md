@@ -13,7 +13,8 @@
 
 ## Screenshots
 
-![Screen Shot](images/screenshot.png)
+![screenshot-1](docs/screenshot-1.JPG)  
+![screenshot-2](docs/screenshot-2.JPG)  
 
 
 ## Built With
