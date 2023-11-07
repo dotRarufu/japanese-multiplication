@@ -36,7 +36,7 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
       parent === null
     )
       return;
-    console.log('checks:', overlapElems.current.length);
+    // console.log('checks:', overlapElems.current.length);
     let currentOverlapElemIndex = -1;
 
     const x1 = Number(question.x1.join(''));
@@ -170,7 +170,7 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     const total = getMaxIntersections(question.x1, question.x2);
     // const total = x1Length * x2Length;
     // const total = x1HasZero || x2HasZero ? x1 * x2 : Math.abs(answer);
-    console.log('total:', total);
+    // console.log('total:', total);
     // console.log('test:', Array(total).fill(''));
     return Array(total)
       .fill('')

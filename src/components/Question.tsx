@@ -23,6 +23,7 @@ const Question = () => {
   const timerResModal = useRef<HTMLDialogElement>(null);
   const answerResModal = useRef<HTMLDialogElement>(null);
   const [shouldResetMarks, setShouldResetMarks] = useState(0);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
   const getAnwerInputNumber = () => {
     return question.x1.length > question.x2.length
       ? question.x1.length
@@ -32,10 +33,14 @@ const Question = () => {
   // Timer
   useEffect(() => {
     const max = getCategoryTimeLimit(category as LevelCategory);
-    // console.log('max:', max);
+
     if (time === max) {
       timerResModal.current!.showModal();
+
+      return;
     }
+
+    if (isTimerPaused) return;
 
     const interval = setInterval(() => {
       if (time < max) {
@@ -48,7 +53,7 @@ const Question = () => {
       clearInterval(interval);
       // console.log('interval cleared');
     };
-  }, [category, navigate, time]);
+  }, [category, isTimerPaused, navigate, time]);
 
   // For setting correct question when changing category
   useEffect(() => {
@@ -101,7 +106,15 @@ const Question = () => {
   return (
     <>
       <div className="h-screen flex flex-col">
-        <TopAppBar question={question.text} />
+        <TopAppBar
+          question={question.text}
+          onTutorialOpen={() => {
+            setIsTimerPaused(true);
+          }}
+          onTutorialClose={() => {
+            setIsTimerPaused(false);
+          }}
+        />
 
         <div className="flex flex-col gap-8 text-[24px] items-center px-[16px] py-4">
           <div className=" text text-center flex flex-col gap-4 w-full">
