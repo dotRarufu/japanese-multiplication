@@ -13,7 +13,7 @@
 
 ## Screenshots
 
-![screenshot-1](docs/screenshot-1.JPG)  
+<img src="docs/screenshot-1.JPG" alt="screenshot-1" style="width:300px;"/>
 ![screenshot-2](docs/screenshot-2.JPG)  
 
 
