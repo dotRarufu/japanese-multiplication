@@ -14,8 +14,7 @@
 ## Screenshots
 
 <img src="docs/screenshot-1.JPG" alt="screenshot-1" style="width:300px;"/>
-![screenshot-2](docs/screenshot-2.JPG)  
-
+<img src="docs/screenshot-2.JPG" alt="screenshot-2" style="width:300px;"/>
 
 ## Built With
 
