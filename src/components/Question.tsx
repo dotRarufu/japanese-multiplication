@@ -114,6 +114,7 @@ const Question = () => {
           onTutorialClose={() => {
             setIsTimerPaused(false);
           }}
+          time={time}
         />
 
         <div className="flex flex-col gap-8 text-[24px] items-center px-[16px] py-4">
@@ -129,22 +130,23 @@ const Question = () => {
 
           <div className="flex flex-col h-full  gap-4 w-full">
             <div className="w-full flex justify-evenly gap-2 ">
-              {Array(getAnwerInputNumber())
-                .fill('')
-                .map((_, index) => (
-                  <input
-                    key={index}
-                    placeholder="0"
-                    value={preAnswer.length === 0 ? '' : preAnswer[index]}
-                    onChange={e => {
-                      const newVal = [...preAnswer];
-                      newVal[index] = e.target.value;
-                      setPreAnswer(newVal);
-                    }}
-                    type="text"
-                    className="w-full text-center input input-primary bg-primary text-primary-content placeholder:text-primary-content shadow-md font-bold"
-                  />
-                ))}
+              {getAnwerInputNumber() > 1 &&
+                Array(getAnwerInputNumber())
+                  .fill('')
+                  .map((_, index) => (
+                    <input
+                      key={index}
+                      placeholder="0"
+                      value={preAnswer.length === 0 ? '' : preAnswer[index]}
+                      onChange={e => {
+                        const newVal = [...preAnswer];
+                        newVal[index] = e.target.value;
+                        setPreAnswer(newVal);
+                      }}
+                      type="text"
+                      className="w-full text-center input input-primary bg-primary text-primary-content placeholder:text-primary-content shadow-md font-bold"
+                    />
+                  ))}
             </div>
             <input
               value={finalAnswer}

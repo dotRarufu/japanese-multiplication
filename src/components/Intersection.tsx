@@ -18,9 +18,9 @@ const Intersection = forwardRef<HTMLDivElement, Props>(
       <div
         onClick={() => setClicked(true)}
         ref={ref}
-        className={`cursor-pointer border-neutral-content border-[0.125em] rounded-full w-[1em] aspect-square absolute z-[99999] hidden ${
-          clicked ? 'bg-success' : isShaded ? 'bg-primary' : 'bg-neutral'
-        }`}
+        className={`cursor-pointer border-[0.125em] rounded-full w-[1em] aspect-square absolute z-[99999] hidden ${
+          isShaded ? 'bg-primary' : 'bg-neutral'
+        } ${clicked ? 'border-info' : 'border-neutral-content'}`}
       />
     );
   }

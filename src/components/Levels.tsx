@@ -1,5 +1,5 @@
 import { LevelCategories, resetLevels } from '../services/level';
-import { FiInfo, FiRefreshCcw } from 'react-icons/fi';
+import { FiHelpCircle, FiRefreshCcw } from 'react-icons/fi';
 import { useMemo, useRef, useState } from 'react';
 import {
   easyQuestions,
@@ -7,6 +7,8 @@ import {
   hardQuestions,
 } from '../data/questions';
 import CategorySlide from './CategorySlide';
+import tutorial1Video from '/assets/positive-cropped.mp4';
+import tutorial2Video from '/assets/2-digits-negative.mp4';
 
 const Levels = () => {
   const easy = useMemo(() => easyQuestions, []);
@@ -25,7 +27,7 @@ const Levels = () => {
   };
 
   const resetModal = useRef<HTMLDialogElement>(null);
-  const instructionsModal = useRef<HTMLDialogElement>(null);
+  const modal = useRef<HTMLDialogElement>(null);
 
   return (
     <>
@@ -40,10 +42,11 @@ const Levels = () => {
           <span className="text-base font-medium">Select a level</span>
           {/* <button className="btn btn-square">Logo</button> */}
           <button
-            onClick={() => instructionsModal.current!.showModal()}
+            onClick={() => modal.current!.showModal()}
             className="btn btn-square btn-sm btn-ghost rounded-md overflow-clip"
           >
-            <FiInfo className="w-[24px] h-[24px] text-primary-content" />
+            {/* <FiInfo className="w-[24px] h-[24px] text-primary-content" /> */}
+            <FiHelpCircle className="w-[24px] h-[24px] text-primary-content" />
           </button>
         </div>
 
@@ -88,24 +91,71 @@ const Levels = () => {
         </form>
       </dialog>
       {/* ====================== Instruction Modal ====================== */}
+
       <dialog
-        ref={instructionsModal}
+        ref={modal}
         id="instructions_modal"
-        className="modal "
+        className="modal"
+        // onClose={() => onTutorialClose()}
       >
-        <div className="modal-box text-primary-content bg-primary rounded-md">
-          {/* <h3 className="font-bold text-lg">Instructions</h3> */}
+        <div className="modal-box text-primary-content bg-primary rounded-md overflow-y-scroll h-full flex flex-col gap-1">
+          <h3 className="font-bold text-lg">Tutorial</h3>
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
             </button>
           </form>
-          <p className="py-4">There will be a timer on each difficulty:</p>
-          <ul className="menu">
-            <li>Easy - 1 minute</li>
-            <li>Medium - 2 minutes</li>
-            <li>Hard - 3 minutes</li>
-          </ul>
+
+          <div className="carousel w-full bg-neutral/50 rounded-md ">
+            <div
+              id="item1"
+              className="carousel-item w-full flex overflow-clip flex-col"
+            >
+              <video
+                className="mx-auto object-contain rounded-md overflow-clip h-full w-fit"
+                autoPlay
+                loop
+              >
+                <source src={tutorial1Video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div
+              id="item2"
+              className=" carousel-item w-full flex overflow-clip flex-col"
+            >
+              <video
+                className="mx-auto object-contain rounded-md overflow-clip h-full w-fit"
+                autoPlay
+                loop
+              >
+                <source src={tutorial2Video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div
+              id="item3"
+              className="bg-primary items-center carousel-item w-full flex overflow-clip flex-col"
+            >
+              <p className="py-4">There will be a timer on each difficulty:</p>
+              <ul className="menu">
+                <li>Easy - 1 minute</li>
+                <li>Medium - 2 minutes</li>
+                <li>Hard - 3 minutes</li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex justify-center w-full py-2 gap-2">
+            <a href="#item1" className="btn btn-xs">
+              1
+            </a>
+            <a href="#item2" className="btn btn-xs">
+              2
+            </a>
+            <a href="#item3" className="btn btn-xs">
+              3
+            </a>
+          </div>
         </div>
 
         <form method="dialog" className="modal-backdrop">

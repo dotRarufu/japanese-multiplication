@@ -9,14 +9,14 @@ import {
 import Question from './components/Question.tsx';
 import Levels from './components/Levels.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
+import Start from './components/Start.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/levels" />,
+    element: <Start />,
   },
   {
-    index: true,
     path: '/levels',
     element: <Levels />,
   },
