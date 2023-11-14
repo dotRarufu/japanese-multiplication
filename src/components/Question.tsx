@@ -7,7 +7,12 @@ import { getActiveCategory } from '../utils/getActiveCategory';
 import { getNextCategory } from '../utils/getNextCategory';
 import { getCategoryTimeLimit } from '../utils/getCategoryTimeLimit';
 
-export type QuestionData = { text: string; x1: number[]; x2: number[] };
+export type QuestionData = {
+  text: string;
+  x1: number[];
+  x2: number[];
+  guide?: string[];
+};
 
 const Question = () => {
   const { number, category } = useParams();
@@ -96,7 +101,19 @@ const Question = () => {
     const x2 = parseInt(question.x2.join(''), 10);
     const correctAnswer = x1 * x2;
 
-    if (Number(finalAnswer) === correctAnswer) setIsCorrect(true);
+    const hasNoGuide = question.guide === undefined;
+    const preAnswersAreCorrect =
+      !hasNoGuide &&
+      preAnswer.length !== 0 &&
+      preAnswer.every(p => question.guide?.includes(p));
+    const guideAnswersAreCorrect = hasNoGuide || preAnswersAreCorrect;
+    // console.log('question.guide:', question.guide);
+    // console.log('preAnswers:', preAnswer);
+    // // console.log('guideAnswersAreCorrect:', guideAnswersAreCorrect);
+    // console.log('preAnswersAreCorrect:', preAnswersAreCorrect);
+
+    if (Number(finalAnswer) === correctAnswer && guideAnswersAreCorrect)
+      setIsCorrect(true);
     else {
       setIsCorrect(false);
       // alert('wrong answer | correct:' + correctAnswer);
