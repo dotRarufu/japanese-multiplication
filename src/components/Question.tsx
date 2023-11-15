@@ -30,9 +30,15 @@ const Question = () => {
   const [shouldResetMarks, setShouldResetMarks] = useState(0);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const getAnwerInputNumber = () => {
-    return question.x1.length > question.x2.length
-      ? question.x1.length
-      : question.x2.length;
+    switch (category) {
+      case 'Medium':
+        return 2;
+      case 'Hard':
+        return 3;
+
+      default:
+        return 1;
+    }
   };
 
   // Timer
