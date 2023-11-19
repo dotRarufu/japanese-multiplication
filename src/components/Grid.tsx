@@ -39,17 +39,17 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     // console.log('checks:', overlapElems.current.length);
     let currentOverlapElemIndex = -1;
 
-    const x1 = Number(question.x1.join(''));
-    const x2 = Number(question.x2.join(''));
-    const answer = x1 * x2;
-    const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
-    const notSameDigitCount = question.x1.length !== question.x2.length;
-    const shouldShade =
-      verticals.current.length > 1 && isShaded === null && notSameDigitCount;
-    let alreadyShadedOne = false;
+    // const x1 = Number(question.x1.join(''));
+    // const x2 = Number(question.x2.join(''));
+    // const answer = x1 * x2;
+    // const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
+    // const notSameDigitCount = question.x1.length !== question.x2.length;
+    // const shouldShade =
+    // verticals.current.length > 1 && isShaded === null && notSameDigitCount;
+    // let alreadyShadedOne = false;
 
-    horizontals.current.forEach((h, hIndex) => {
-      if (hIndex > 1) alreadyShadedOne = true;
+    horizontals.current.forEach(h => {
+      // if (hIndex > 1) alreadyShadedOne = true;
 
       verticals.current.forEach(v => {
         const isOverlap = isOverlapping(h!, v!);
@@ -69,9 +69,9 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
           // console.log('overlap show:', x, y);
 
           // Shade
-          if (shouldShade && !alreadyShadedOne) {
-            overlapElem.style.backgroundColor = '#fcd662';
-          }
+          // if (shouldShade && !alreadyShadedOne) {
+          //   overlapElem.style.backgroundColor = '#fcd662';
+          // }
         }
 
         // const overlapElem = overlapElems.current[currentOverlapElemIndex + 1]!;
@@ -158,8 +158,12 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     // console.log('overlaps:', overlapElems.current.length);
     const x1 = Number(question.x1.join(''));
     const x2 = Number(question.x2.join(''));
-    const answer = x1 * x2;
-    const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
+    // const answer = x1 * x2;
+    // const isShaded = x1 < 0 && x2 < 0 ? false : answer > 0 ? true : null;
+    const isHollow = x1 < 0 || x2 < 0;
+    console.log('isHollow:', isHollow);
+    // console.log('x1:', x1);
+    // console.log('x2:', x2);
 
     // const x1HasZero = question.x1.filter(a => a === 0).length > 0;
     // const x2HasZero = question.x2.filter(a => a === 0).length > 0;
@@ -172,13 +176,14 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     // const total = x1HasZero || x2HasZero ? x1 * x2 : Math.abs(answer);
     // console.log('total:', total);
     // console.log('test:', Array(total).fill(''));
+    // console.log('total:', overlapElems.current.length);
     return Array(total)
       .fill('')
       .map((_, i) => (
         <Intersection
           key={i}
           shouldResetMarks={shouldResetMarks}
-          isShaded={!!isShaded}
+          isShaded={!isHollow}
           ref={element => {
             overlapElems.current = [
               ...[...overlapElems.current].filter(v => v !== null),
