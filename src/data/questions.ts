@@ -179,6 +179,6 @@ export const hardQuestions: QuestionData[] = [
     text: '43 x 10',
     x1: [4, 3],
     x2: [1, 0],
-    guide: [],
+    guide: ['4', '3', '0'],
   },
 ];

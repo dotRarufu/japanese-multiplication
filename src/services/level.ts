@@ -16,6 +16,10 @@ export const updateLatestLevel = (level: number, category: LevelCategory) => {
   const data =
     stringData !== null ? (JSON.parse(stringData) as AppData) : DefaultAppData;
 
+  const currentCategory = data.levels.find(l => l.category === category)!;
+
+  if (level <= currentCategory.level) return;
+
   const newLevels = data.levels.map(l =>
     l.category === category ? { ...l, level } : l
   );
