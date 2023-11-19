@@ -7,14 +7,17 @@ export type GridProps = {
   x1: number[];
   x2: number[];
   shouldResetMarks: number;
+  allIsCounted: () => void;
 };
 
-function Grid({ x1, x2, shouldResetMarks }: GridProps) {
+function Grid({ x1, x2, shouldResetMarks, allIsCounted }: GridProps) {
   const [, setTime] = useState(new Date());
   const verticals = useRef<(HTMLDivElement | null)[]>([]);
   const horizontals = useRef<(HTMLDivElement | null)[]>([]);
   const overlapElems = useRef<(HTMLDivElement | null)[]>([]);
   const parentElem = useRef<HTMLDivElement | null>(null);
+  const [total, setTotal] = useState<number | null>(null);
+  const [countedTotal, setCountedTotal] = useState<null | number>(null);
 
   const [question, setQuestion] = useState<{ x1: number[]; x2: number[] }>({
     x1,
@@ -79,6 +82,14 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
       });
     });
   };
+
+  useEffect(() => {
+    console.log('countedTotal:', countedTotal);
+    console.log('total:', total);
+    if (countedTotal === null || total === null) return;
+
+    if (countedTotal >= total) allIsCounted();
+  }, [allIsCounted, countedTotal, total]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -171,17 +182,19 @@ function Grid({ x1, x2, shouldResetMarks }: GridProps) {
     // const x2Length = question.x2.length;
     // const total =
     //   x1HasZero || x2HasZero ? x1Length * x2Length : Math.abs(answer);
-    const total = getMaxIntersections(question.x1, question.x2);
+    const maxIntersections = getMaxIntersections(question.x1, question.x2);
     // const total = x1Length * x2Length;
     // const total = x1HasZero || x2HasZero ? x1 * x2 : Math.abs(answer);
     // console.log('total:', total);
     // console.log('test:', Array(total).fill(''));
     // console.log('total:', overlapElems.current.length);
-    return Array(total)
+    total !== maxIntersections && setTotal(maxIntersections);
+    return Array(maxIntersections)
       .fill('')
       .map((_, i) => (
         <Intersection
           key={i}
+          onClick={() => setCountedTotal(o => (o || 0) + 1)}
           shouldResetMarks={shouldResetMarks}
           isShaded={!isHollow}
           ref={element => {

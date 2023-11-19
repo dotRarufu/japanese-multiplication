@@ -29,6 +29,8 @@ const Question = () => {
   const answerResModal = useRef<HTMLDialogElement>(null);
   const [shouldResetMarks, setShouldResetMarks] = useState(0);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const [allIsCounted, setAllIsCounted] = useState(false);
+
   const getAnwerInputNumber = () => {
     switch (category) {
       case 'Medium':
@@ -82,6 +84,7 @@ const Question = () => {
     setQuestion(next);
     setTime(0);
     setShouldResetMarks(o => o + 1);
+    setAllIsCounted(false);
 
     if (nextLevel > activeQuestionSet.length) {
       const nextCategory = getNextCategory(category as LevelCategory);
@@ -113,16 +116,16 @@ const Question = () => {
       preAnswer.length !== 0 &&
       preAnswer.every(p => question.guide?.includes(p));
     const guideAnswersAreCorrect = hasNoGuide || preAnswersAreCorrect;
-    // console.log('question.guide:', question.guide);
-    // console.log('preAnswers:', preAnswer);
-    // // console.log('guideAnswersAreCorrect:', guideAnswersAreCorrect);
-    // console.log('preAnswersAreCorrect:', preAnswersAreCorrect);
+    const intersectionsAreCounted = category === 'Easy' || allIsCounted;
 
-    if (Number(finalAnswer) === correctAnswer && guideAnswersAreCorrect)
+    if (
+      Number(finalAnswer) === correctAnswer &&
+      guideAnswersAreCorrect &&
+      intersectionsAreCounted
+    )
       setIsCorrect(true);
     else {
       setIsCorrect(false);
-      // alert('wrong answer | correct:' + correctAnswer);
     }
   };
 
@@ -144,6 +147,7 @@ const Question = () => {
           <div className=" text text-center flex flex-col gap-4 w-full">
             <div className="">
               <Grid
+                allIsCounted={() => setAllIsCounted(true)}
                 shouldResetMarks={shouldResetMarks}
                 x1={question.x1}
                 x2={question.x2}
@@ -159,7 +163,7 @@ const Question = () => {
                   .map((_, index) => (
                     <input
                       key={index}
-                      placeholder="0"
+                      placeholder="--"
                       value={preAnswer.length === 0 ? '' : preAnswer[index]}
                       onChange={e => {
                         const newVal = [...preAnswer];
@@ -229,9 +233,10 @@ const Question = () => {
             {isCorrect ? 'Correct' : 'Wrong'}
           </h3>
           <p className="py-4">
-            {' '}
             {isCorrect
               ? "You've answered the question correct"
+              : !allIsCounted
+              ? 'You have to tap all of the circles'
               : 'Sorry, wrong answer'}
           </p>
 
